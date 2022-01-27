@@ -1,7 +1,9 @@
+import { getSession, signOut } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
 
-export default function Home() {
+const Home = ({ session }) => {
+  console.log(session);
   return (
     <div>
       <Head>
@@ -11,8 +13,30 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1>Hello</h1>
+        <h1>Hello {session.user.name}</h1>
+        <button onClick={() => signOut()}>Sign Out</button>
       </main>
     </div>
   );
-}
+};
+
+export const getServerSideProps = async (context) => {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+};
+
+export default Home;
