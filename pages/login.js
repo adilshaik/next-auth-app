@@ -4,8 +4,6 @@ import { providers, getSession, signIn } from 'next-auth/client';
 import Router from 'next/router';
 
 const Login = ({ providers, session }) => {
-  console.log({ providers, session });
-
   useEffect(() => {
     if (session) Router.push('/');
   }, [session]);
