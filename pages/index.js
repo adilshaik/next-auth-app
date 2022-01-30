@@ -1,9 +1,10 @@
 import { getSession, signOut } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
+import { Navbar } from '../components/Navbar';
+import { TodoInput } from '../components/TodoInput';
 
 const Home = ({ session }) => {
-  console.log(session);
   return (
     <div>
       <Head>
@@ -12,9 +13,9 @@ const Home = ({ session }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
+      <Navbar />
       <main>
-        <h1>Hello {session.user.name}</h1>
-        <button onClick={() => signOut()}>Sign Out</button>
+        <TodoInput />
       </main>
     </div>
   );
