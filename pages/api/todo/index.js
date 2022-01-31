@@ -9,6 +9,9 @@ const handler = async (req, res) => {
     case 'POST':
       await createTodo(req, res);
       break;
+    case 'GET':
+      await getTodos(req, res);
+      break;
   }
 };
 
@@ -34,6 +37,23 @@ const createTodo = async (req, res) => {
     await newTodo.save();
 
     res.json({ msg: 'Success! Create a new todo.' });
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+};
+
+const getTodos = async (req, res) => {
+  try {
+    const session = await getSession({ req });
+    if (!session) {
+      return res.status(400).json({ msg: 'Invalid Authentication' });
+    }
+
+    const { userId } = session;
+
+    const todos = Todo.find({ user: userId });
+
+    res.json(todos);
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
