@@ -1,10 +1,14 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 export const TodoInput = () => {
   const [todo, setTodo] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const res = await axios.post('/api/todo', { todo });
+    console.log(res);
   };
 
   return (

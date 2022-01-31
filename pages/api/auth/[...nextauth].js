@@ -37,4 +37,11 @@ export default NextAuth({
   ],
 
   database: process.env.DATABASE_URL,
+
+  callbacks: {
+    session: async (session, user) => {
+      session.userId = user.sub;
+      return Promise.resolve(session);
+    },
+  },
 });
