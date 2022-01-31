@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const TodoInput = () => {
   const [todo, setTodo] = useState('');
@@ -7,8 +8,13 @@ export const TodoInput = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post('/api/todo', { todo });
-    console.log(res);
+    try {
+      const res = await axios.post('/api/todo', { todo });
+      toast.success(res.data.msg);
+      setTodo('');
+    } catch (error) {
+      toast.error(error.response.data.msg);
+    }
   };
 
   return (

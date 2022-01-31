@@ -1,10 +1,32 @@
+import axios from 'axios';
 import { getSession, signOut } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { TodoInput } from '../components/TodoInput';
+import { toast } from 'react-toastify';
+import { TodoItem } from '../components/TodoItem';
 
-const Home = ({ session }) => {
+const Home = () => {
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('api/todo');
+        setTodos(res.data);
+        setLoading(false);
+      } catch (error) {
+        toast.error(error.response.data.msg);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
       <Head>
@@ -16,6 +38,12 @@ const Home = ({ session }) => {
       <Navbar />
       <main>
         <TodoInput />
+        <div className='max-w-7xl mx-auto'>
+          {todos.map((todo) => (
+            <TodoItem key={todo._id} todo={todo} />
+          ))}
+        </div>
+        {loading && <h1>Loading...</h1>}
       </main>
     </div>
   );
